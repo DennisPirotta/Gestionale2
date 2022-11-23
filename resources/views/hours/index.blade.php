@@ -1,3 +1,4 @@
+@php use App\Models\HourType;use App\Models\Order; @endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex">
@@ -8,7 +9,9 @@
             <div class="ml-auto">
                 <form id="month-form">
                     <label>
-                        <input type="month" id="month" name="month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{__('Select date')}}" value="{{ request('month') }}">
+                        <input type="month" id="month" name="month"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="{{__('Select date')}}" value="{{ request('month') }}">
                     </label>
                 </form>
             </div>
@@ -20,82 +23,103 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @unless($data->count() === 0 || !request('month'))
-                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 text-center">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 text-center">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="py-2 px-4">
                                         #
                                     </th>
                                     @foreach($period as $day)
-                                        <th scope="col" class="py-2 px-4 border-l border-gray-500">{{ $day->format('j') }}</th>
+                                        <th scope="col"
+                                            class="py-2 px-4 border-l border-gray-300 dark:border-gray-500">{{ $day->format('j') }}</th>
                                     @endforeach
                                 </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($data as $desc=>$type)
-                                <tr class="bg-white dark:bg-gray-500 dark:border-gray-800">
-                                    <td class="py-2 px-4 dark:bg-gray-800 border-l">{{ $desc }}</td>
-                                </tr>
-                                @foreach($type as $key=>$content)
-                                    @foreach($content as $job_type=>$hours)
-                                        <tr class="bg-white dark:bg-gray-900 dark:border-gray-800 border-b">
-                                            <td class="border-r border-gray-700 p-1.5">
-{{--                                                {{ $key !== 0 ? $key ?? '' : '' }}--}}
-                                                {{ $key }}
-                                                @if($job_type !== 0)
-                                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-                                                        {{ $job_type }}
-                                                    </span>
-                                                @endif
-                                            </td>
-                                            @foreach($period as $day)
-                                                <td class="border-r border-gray-700" data-datetime="{{$day->format('Y-m-d')}}" data-row="{{$desc}}" data-extra="{{$key}}" data-job="{{$job_type}}" contenteditable="true"
-                                                @foreach($hours as $hour)
-                                                    @if($hour->date === $day->format('Y-m-d'))
-                                                        data-hour="{{ $hour->id }}">
-                                                        {{ $hour->count }}
+                                </thead>
+                                <tbody>
+                                @foreach($data as $desc=>$type)
+                                    <tr class="bg-gray-50 dark:bg-gray-500 dark:border-gray-800">
+                                        <td class="py-2 px-4 dark:bg-gray-800 border-l">{{ $desc }}</td>
+                                        <td colspan="{{$period->count()}}" class="py-2 px-4 dark:bg-gray-800"></td>
+                                    </tr>
+                                    @foreach($type as $key=>$content)
+                                        @foreach($content as $job_type=>$hours)
+                                            <tr class="bg-gray-100 dark:bg-gray-900 dark:border-gray-800 border-b">
+                                                <td class="border-r dark:border-gray-700 p-1.5 grid grid-cols-1 place-items-center">
+                                                    <div class="font-bold">
+                                                        {{ $key !== 0 ? $key : '' }}
+                                                    </div>
+
+                                                    @if(Order::where('innerCode',$key)->exists())
+                                                        <div>
+                                                            {{ Order::where('innerCode',$key)->value('outerCode') }}
+                                                        </div>
+                                                        <div>
+                                                            {{ Order::where('innerCode',$key)->first()->customer->name }}
+                                                        </div>
                                                     @endif
-                                                @endforeach
+                                                    @if(is_string($job_type))
+                                                        <div class="w-15 dark:bg-blue-100 bg-blue-300 text-blue-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                                                            {{ $job_type }}
+                                                        </div>
+                                                    @endif
                                                 </td>
-                                            @endforeach
-                                        </tr>
+                                                @foreach($period as $day)
+                                                    <td class="border-r dark:border-gray-700"
+                                                        data-datetime="{{ $day->format('Y-m-d') }}"
+                                                        data-row="{{ $hour_types->where('description',$desc)->value('id') }}"
+                                                        data-extra="{{ $key }}"
+                                                        data-job="{{ $job_types->where('title',$job_type)->value('id') }}"
+                                                        contenteditable="true"
+                                                        @foreach($hours as $hour)
+                                                            @if($hour->date === $day->format('Y-m-d'))
+                                                                data-hour="{{ $hour->id }}">
+                                                        {{ $hour->count }}
+                                                        @endif
+                                                        @endforeach
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
                                     @endforeach
                                 @endforeach
-                            @endforeach
-                            </tbody>
-                        </table>
-                    @else
-                        <h2>
-                            Nessuna ora disponibile al momento
-                        </h2>
-                    </div>
+                                </tbody>
+                            </table>
+                            @else
+                                <h2>
+                                    Nessuna ora disponibile al momento
+                                </h2>
+                        </div>
                     @endunless
                 </div>
             </div>
         </div>
     </div>
-{{--    <x-flash-message></x-flash-message>--}}
+    <x-speed-dial>
+        <x-speed-dial-option :route="route('hours.create')" :icon="config('constants.icons.hours.new')"/>
+        <x-speed-dial-tooltip :message="'New Hour'"/>
+    </x-speed-dial>
+    {{--    <x-flash-message></x-flash-message>--}}
     <script>
-        $(()=>{
+        $(() => {
             const token = $('meta[name="csrf-token"]').attr('content')
             let cells = $('td')
-            cells.on('focusout',e=>{
+            cells.on('focusout', e => {
                 let url = '{{ route('hours.store') }}'
                 let method = 'POST'
-                if($(e.target).attr('data-hour')){
-                    method = 'PUT'
-                    url = '/hours/'+$(e.target).attr('data-hour')
+                if ($(e.target).attr('data-hour')) {
+                    url = '/hours/' + $(e.target).attr('data-hour')
+                    if ($(e.target).text().trim() === '' || $(e.target).text().trim() === '0') method = 'DELETE'
+                    else method = 'PUT'
                 }
-
                 const data = {
                     '_token': token,
                     '_method': method,
-                    'count':  $(e.target).text().trim(),
+                    'count': $(e.target).text().trim(),
                     'date': $(e.target).attr('data-datetime'),
-                    'description' : null,
+                    'description': null,
                     'hour_type_id': $(e.target).attr('data-row'),
-                    'extra':  $(e.target).attr('data-extra'),
+                    'extra': $(e.target).attr('data-extra'),
                     'job': $(e.target).attr('data-job'),
                     'hour': $(e.target).attr('data-hour')
                 };
@@ -113,18 +137,18 @@
                     body: JSON.stringify(data),
                 })
             })
-            cells.keypress( e => {
-                if (e.which < 48 || e.which > 57)
-                {
+            cells.keypress(e => {
+                if (e.which < 48 || e.which > 57) {
                     e.preventDefault();
                 }
-                if(e.keyCode === 13){
+                if (e.keyCode === 13) {
+                    e.preventDefault();
                     $(e.target).blur()
                 }
-            } )
-            $('#month').change( e => {
+            })
+            $('#month').change(() => {
                 $('#month-form').submit()
-            } )
+            })
         })
     </script>
 </x-app-layout>

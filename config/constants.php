@@ -30,6 +30,72 @@ return [
                 'color' => '',
                 'icon' => '<svg aria-hidden="true" class="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
             ],
+        ],
+        'job_types' => [
+            'Sviluppo Software' => [
+                'tw-color' => '',
+                'tw-bg' => '',
+            ],
+            'Messa in servizio' => [
+                'tw-color' => ''
+            ],
+            'Safety' => [
+                'tw-color' => ''
+            ],
+            'Collaudo' => [
+                'tw-color' => ''
+            ],
+            'Modifiche' => [
+                'tw-color' => ''
+            ],
+            'Riunioni' => [
+                'tw-color' => ''
+            ],
+            'Assistenza' => [
+                'tw-color' => ''
+            ],
         ]
+    ],
+    'hours' => [
+        'types' => [
+            'Commessa' => [
+                'tw-color' => ''
+            ],
+            'Foglio intervento' => [
+                'tw-color' => ''
+            ],
+            'Assistenza' => [
+                'tw-color' => ''
+            ],
+            'AVIS' => [
+                'tw-color' => ''
+            ],
+            'Corso' => [
+                'tw-color' => ''
+            ],
+            'Ferie' => [
+                'tw-color' => ''
+            ],
+            'Malattia' => [
+                'tw-color' => ''
+            ],
+            'Ufficio' => [
+                'tw-color' => ''
+            ],
+            'Visita medica' => [
+                'tw-color' => ''
+            ],
+            'Altro' => [
+                'tw-color' => ''
+            ]
+        ]
+    ],
+    'icons' => [
+        'customers' => [
+            'new' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>'
+        ],
+        'hours' => [
+            'new' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+        ],
     ]
 ];

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "flowbite": "^1.5.4",
-    "flowbite-datepicker": "^1.2.2"
+    "flowbite-datepicker": "^1.2.2",
+    "sass": "^1.56.1"
   }
 }

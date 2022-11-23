@@ -21,13 +21,15 @@ class StoreHourRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'count' => 'required',
-            'date' => 'required',
+            'date' => 'required_without:start,end',
+            'start' => 'required_without:date',
+            'end' => 'required_without:date',
             'description' => 'nullable',
-            'hour_type_id' => 'required',
+            'hour_type_id' => ['required','not_in:0'],
             'user_id' => 'nullable',
         ];
     }

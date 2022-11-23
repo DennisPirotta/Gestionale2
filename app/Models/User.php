@@ -16,6 +16,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -54,6 +55,10 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read Collection|Hour[] $hours
+ * @property-read int|null $hours_count
+ * @property-read Collection|TechnicalReport[] $technical_reports
+ * @property-read int|null $technical_reports_count
  */
 class User extends Authenticatable
 {
@@ -68,7 +73,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'language'
+        'language',
+        'image'
     ];
 
     /**
@@ -113,5 +119,22 @@ class User extends Authenticatable
     public function hoursInPeriod(CarbonPeriod $period)
     {
         return $this->hours->whereBetween('date',[$period->first(),$period->last()]);
+    }
+
+    public function clearImage(): void
+    {
+        if ($this->hasImage()) {
+            $this->deleteImage();
+        }
+    }
+
+    public function hasImage(): bool
+    {
+        return $this->image !== null && File::exists(public_path('storage/images/users/' . $this->image));
+    }
+
+    public function deleteImage(): void
+    {
+        File::delete(public_path('storage/images/users/' . $this->image));
     }
 }

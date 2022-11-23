@@ -37,7 +37,6 @@
             $('#image-preview').removeClass('hidden')
             $('#no-image').addClass('hidden')
             $('#image-preview img').attr('src', URL.createObjectURL(e.target.files[0]))
-            console.log(URL.createObjectURL(e.target.files[0]))
         })
     })
 </script>

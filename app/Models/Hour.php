@@ -32,6 +32,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Hour whereId($value)
  * @method static Builder|Hour whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int $hour_type_id
+ * @property int $user_id
+ * @property-read HourType $type
+ * @property-read User $user
+ * @method static Builder|Hour filter(array $filters)
+ * @method static Builder|Hour whereHourTypeId($value)
+ * @method static Builder|Hour whereUserId($value)
  */
 class Hour extends Model
 {
@@ -52,7 +59,7 @@ class Hour extends Model
         }
     }
 
-    public function order_hour(): OrderHour|null
+    public function order_hour(): OrderHour
     {
         return OrderHour::where('hour_id', $this->id)->first();
     }

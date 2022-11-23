@@ -38,6 +38,22 @@
                             alt="{{ __('English') }}">
                 </label>
             </li>
+            <li>
+                <input type="radio" id="ukrainian" name="lang" value="uk" class="hidden peer"
+                       @if(App::getLocale() === 'uk') checked @endif>
+                <label for="ukrainian"
+                       class="inline-flex justify-between items-center p-5 w-full text-gray-500 bg-white rounded-lg border border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <div class="block">
+                        <div class="w-full text-lg font-semibold">{{ __('Ukrainian') }}</div>
+                    </div>
+                    <img
+                            src="https://flagcdn.com/24x18/ua.png"
+                            srcset="https://flagcdn.com/48x36/ua.png 2x,https://flagcdn.com/72x54/ua.png 3x"
+                            width="24"
+                            height="18"
+                            alt="{{ __('Ukrainian') }}">
+                </label>
+            </li>
         </ul>
         <x-primary-button>{{ __('Save') }}</x-primary-button>
     </form>

@@ -31,6 +31,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|JobType whereTitle($value)
  * @method static Builder|JobType whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read Collection|OrderHour[] $hours
+ * @property-read int|null $hours_count
  */
 class JobType extends Model
 {

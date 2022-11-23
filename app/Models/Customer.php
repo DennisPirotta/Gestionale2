@@ -32,6 +32,8 @@ use Illuminate\Support\Facades\File;
  * @method static Builder|Customer whereName($value)
  * @method static Builder|Customer whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read Collection|TechnicalReport[] $technical_reports
+ * @property-read int|null $technical_reports_count
  */
 class Customer extends Model
 {
