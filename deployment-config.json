@@ -1,10 +1,12 @@
-{
-  "name": "server",
-  "ip": "139.162.151.193",
-  "username": "github",
-  "password": "zaubwhqA1LFLAfDCXQXpPhWRhRaBWanKriHm6o5Q7JtIRMZ1CK",
-  "port": "22",
-  "beforeHooks": "",
-  "afterHooks": "",
-  "path": "/var/www/html"
-}
+[
+  {
+    "name": "server",
+    "ip": "139.162.151.193",
+    "username": "github",
+    "password": "zaubwhqA1LFLAfDCXQXpPhWRhRaBWanKriHm6o5Q7JtIRMZ1CK",
+    "port": "22",
+    "beforeHooks": "",
+    "afterHooks": "",
+    "path": "/var/www/html"
+  }
+]

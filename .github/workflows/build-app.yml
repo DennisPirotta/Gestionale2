@@ -37,11 +37,8 @@ jobs:
       - name: Export deployment matrix
         id: export-deployment-matrix
         run: |
-          JSON="$(cat ./deployment-config.json)"
-          JSON="${JSON//'%'/'%25'}"
-          JSON="${JSON//$%'\n'/'%0A'}"
-          JSON="${JSON//$%'\r'/'%0D'}"
-          echo "{deployment-matrix}={$JSON}" >> $GITHUB_OUTPUT
+          JSON=$(echo $(cat ./deployment-config.json) | sed 's/ //g' )
+          echo "::set-output name=deployment-matrix::$JSON"
   prepare-release-on-servers:
     runs-on: ubuntu-latest
     needs: create-deployment-artifacts
