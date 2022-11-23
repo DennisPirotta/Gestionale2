@@ -22,3 +22,5 @@ jobs:
           extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
+      - name: Create Deployment artifacts
+        run: tar -czf app.tar.gz --exclude=*.git --exclude=node_modules *
