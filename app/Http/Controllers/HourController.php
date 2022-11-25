@@ -64,7 +64,7 @@ class HourController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(): Response
     {
         return response()->view('hours.create',[
             'hour_types' => HourType::all(),
@@ -107,7 +107,7 @@ class HourController extends Controller
                 Session::flash('hour_type',$hour->hour_type_id);
                 $hour->delete();
             }
-            $this->storeTechnicalReportHour($hour->id,$details->validated());
+            $this->storeTechnicalReportHour($hour,$details->validated());
         }
         if ($request->ajax()){
             return response('Ora Inserita Correttamente');
@@ -194,20 +194,25 @@ class HourController extends Controller
         ]);
     }
 
-    public function storeTechnicalReportHour($hour_id,$info): void
+    /**
+     * @throws ValidationException
+     */
+    public function storeTechnicalReportHour(Hour $hour, $info): void
     {
-        if ($info['extra'] === '0') {
-            dd(request());
-            Validator::make(request()->only(['number','fi_order_id','customer_id','secondary_customer_id']),[
+        if ($info['extra'] === 'new') {
+            $validated = Validator::make(request()->only(['number','fi_order_id','customer_id','secondary_customer_id']),[
                 'number' => 'required',
                 'fi_order_id' => 'nullable',
                 'customer_id' => 'required',
-                'secondary_customer_id' => 'nullable'
-            ]);
+                'secondary_customer_id' => 'nullable',
+            ])->validated();
+            $validated['user_id'] = request('user_id',auth()->id());
+            $technical_report = TechnicalReport::create($validated);
+        }else{
+            $technical_report = TechnicalReport::find($info['extra']) ?? TechnicalReport::where('number',$info['extra'])->first();
         }
-        $technical_report = TechnicalReport::find($info['extra']) ?? TechnicalReport::where('number',$info['extra'])->first();
         TechnicalReportHour::create([
-            'hour_id' => $hour_id,
+            'hour_id' => $hour->id,
             'nightEU' => $info['night'] === 'eu',
             'nightXEU' => $info['night'] === 'xeu',
             'technical_report_id' => $technical_report->id

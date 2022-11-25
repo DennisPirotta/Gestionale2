@@ -7,7 +7,7 @@
     <div class="mt-6 space-y-6" x-data="{multiple:false}">
         <div>
             <x-input-label for="count" :value="__('Count')"/>
-            <x-text-input id="count" name="count" type="number" min=1 class="mt-1 block w-full" :value="'8'" required/>
+            <x-text-input id="count" name="count" type="number" step="0.5" min=1 class="mt-1 block w-full" :value="'8'" required/>
             <x-input-error class="mt-2" :messages="$errors->get('count')"/>
         </div>
 
