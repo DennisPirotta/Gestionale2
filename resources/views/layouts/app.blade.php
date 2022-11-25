@@ -17,7 +17,7 @@
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 </head>
 <body class="font-sans antialiased">
-
+<script>if (localStorage.theme === undefined) localStorage.theme = 'light'</script>
 <div  class="min-h-screen bg-gray-100 dark:bg-gray-900">
     @include('layouts.navigation')
 

@@ -30,11 +30,6 @@
 
     <script>
         $(() => {
-
-            console.log(@json($eur_chf, JSON_THROW_ON_ERROR))
-            console.log(@json($eur_usd, JSON_THROW_ON_ERROR))
-            console.log(@json($usd_chf, JSON_THROW_ON_ERROR))
-
             let options = {
                 chart: {
                     events: {

@@ -17,7 +17,7 @@ class ProfileController extends Controller
      * @param Request $request
      * @return View
      */
-    public function edit(Request $request)
+    public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -48,7 +48,7 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function updateLang(Request $request)
+    public function updateLang(Request $request): RedirectResponse
     {
         $data = $request->validate(['lang' => 'required']);
         Auth::user()->update(['language' => $data['lang']]);
@@ -61,7 +61,7 @@ class ProfileController extends Controller
      * @param ProfileUpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(ProfileUpdateRequest $request)
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
 
