@@ -21,7 +21,7 @@
                     <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index')">
                         {{ __('Orders') }}
                     </x-nav-link>
-                    <x-nav-link :href="redirect()->action([HourController,'index'],['month' => Carbon::now()->format('Y-m')])" :active="request()->routeIs('hours.index')">
+                    <x-nav-link :href="route('hours.index').'?month='.Carbon\Carbon::now()->format('Y-m')" :active="request()->routeIs('hours.index')">
                         {{ __('Hours') }}
                     </x-nav-link>
                 </div>
