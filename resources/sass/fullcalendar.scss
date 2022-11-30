@@ -1,0 +1,29 @@
+html{
+    &.dark{
+        .fc-daygrid-day-number {
+            color: #a6a2a2;
+        }
+        .fc-col-header-cell-cushion{
+            color: #dbd7d7;
+        }
+        .fc-toolbar-title{
+            color: #dbd7d7;
+        }
+        --fc-border-color: #989696;
+    }
+    .fc-event-title-container{
+        cursor: pointer;
+    }
+    .fc-daygrid-day-number {
+        color: black;
+    }
+    .fc-col-header-cell-cushion{
+        color: black;
+    }
+    .fc-toolbar-title{
+        color: black;
+    }
+    --fc-border-color: black;
+    --fc-highlight-color: rgba(188, 232, 241, 0.3);
+    --fc-today-bg-color: rgba(238, 211, 175, 0.09);
+}

@@ -43,12 +43,15 @@
                                             {{ __('Customer') }}
                                         </th>
                                         <th scope="col" class="py-3 px-6">
+                                            {{ __('Status') }}
+                                        </th>
+                                        <th scope="col" class="py-3 px-6">
                                             {{ __('Action') }}
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($orders as $order)
+                                    @foreach($orders->sortBy('status') as $order)
                                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                             <th scope="row"
                                                 class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -62,6 +65,9 @@
                                             </td>
                                             <td class="py-4 px-6">
                                                 {{ $order->customer->name }}
+                                            </td>
+                                            <td class="py-4 px-6">
+                                                <span style="background-color: {{ config('constants.orders.statuses.'.$order->status->description.'.color') }}" class="text-gray-900 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">{{ $order->status->description }}</span>
                                             </td>
                                             <td class="py-4 px-6 flex">
                                                 <a href="#"

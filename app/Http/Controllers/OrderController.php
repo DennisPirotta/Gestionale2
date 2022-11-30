@@ -18,7 +18,7 @@ class OrderController extends Controller
     {
         return response()->view('orders.index', [
             'statuses' => Status::with('orders', 'orders.customer')->get(),
-            'orders' => Order::with('customer')->get()
+            'orders' => Order::with('customer','status')->get()
         ]);
     }
 

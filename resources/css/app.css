@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media print {
+    @page {
+        size: landscape;
+        margin: 0
+    }
+    .speed-dial{
+        display: none;
+    }
+    nav{
+        display: none;
+    }
+    table{
+        transform: translate(-19%,-19%) scale(0.62);
+    }
+}

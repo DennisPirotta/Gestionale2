@@ -104,7 +104,7 @@
             }
             let date = document.getElementById('date')
             date.value = '{{ Carbon::now()->format('Y-m-d') }}'
-            console.log(new Datepicker(date,options))
+            new Datepicker(date,options)
             let multiple = document.getElementById('date-multiple')
             new DateRangePicker(multiple, options)
         })

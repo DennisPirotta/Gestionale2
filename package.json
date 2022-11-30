@@ -16,9 +16,16 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
+    "@fullcalendar/core": "^5.11.3",
+    "@fullcalendar/daygrid": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/list": "^5.11.3",
+    "@fullcalendar/timegrid": "^5.11.3",
     "apexcharts": "^3.36.3",
     "flowbite": "^1.5.4",
     "flowbite-datepicker": "^1.2.2",
+    "postcss-calc": "^8.2.4",
+    "postcss-custom-properties": "^13.0.0",
     "sass": "^1.56.1"
   }
 }

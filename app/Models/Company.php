@@ -28,12 +28,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Company newModelQuery()
  * @method static Builder|Company newQuery()
  * @method static Builder|Company query()
- * @method static Builder|Company whereCreatedAt($value)
- * @method static Builder|Company whereHolidays($value)
- * @method static Builder|Company whereId($value)
- * @method static Builder|Company whereName($value)
- * @method static Builder|Company whereShort($value)
- * @method static Builder|Company whereUpdatedAt($value)
  * @mixin Eloquent
  */
 class Company extends Model

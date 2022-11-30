@@ -6,10 +6,18 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="grid grid-cols-3 gap-4 sm:px-6 lg:px-8">
+            <div class=" col-span-3 md:mx-10 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div id="chart" class="relative">
+                    <div class="mb-4 text-xl flex">
+                        <span>
+                            {{__('Currency Exchange')}} <small class="dark:text-gray-500">| {{__('Last year')}}</small>
+                        </span>
+                        <span class="ml-auto">
+                            {{__('Euro')}} &#8594 {{ __('Swiss Franc') }}
+                        </span>
+                    </div>
+                    <div id="chart" class="relative w-full">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-x-1/2 z-50" id="loading">
                             <div role="status">
                                 <svg class="inline mr-2 w-32 h-32 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -25,6 +33,11 @@
                     </div>
                 </div>
             </div>
+{{--            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">--}}
+{{--                <div class="p-6 text-gray-900 dark:text-gray-100">--}}
+{{--                    Awesome--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
     </div>
 
@@ -32,6 +45,7 @@
         $(() => {
             let options = {
                 chart: {
+                    height: '450vw',
                     events: {
                         mounted: function (chartContext, config) {
                             $('#loading').fadeOut()
@@ -44,6 +58,9 @@
                         show: false
                     },
                     type: 'area'
+                },
+                stroke: {
+                    curve: 'smooth',
                 },
                 legend: {
                     labels: {
@@ -60,25 +77,16 @@
                     enabled: false
                 },
                 fill: {
-                    colors: ['#F44336', '#E91E63', '#9C27B0'],
                     gradient: {
                         enabled: true,
-                        opacityFrom: 0.55,
+                        opacityFrom: 0.7,
                         opacityTo: 0
                     }
                 },
                 series: [
                     {
                         name: '{{__('Euro')}} &#8594 {{ __('Swiss Franc') }}',
-                        data: @json($eur_chf, JSON_THROW_ON_ERROR)
-                    },
-                    {
-                        name: '{{__('Euro')}} &#8594 {{ __('US Dollar') }}',
-                        data: @json($eur_usd, JSON_THROW_ON_ERROR)
-                    },
-                    {
-                        name: '{{__('US Dollar')}} &#8594 {{ __('Swiss Franc') }}',
-                        data: @json($usd_chf, JSON_THROW_ON_ERROR)
+                        data: @json($exchanges, JSON_THROW_ON_ERROR)
                     }
                 ],
                 xaxis: {
@@ -99,25 +107,6 @@
             }
             let chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
-            console.log(chart)
-            //updateChart(chart, 'https://api.twelvedata.com/time_series?apikey=f9a705d145864db6af87e9135dcc9f40&interval=1day&symbol=EUR/CHF&start_date=2022-11-01 08:57:00&end_date=2022-11-23 08:57:00')
         })
-
-        async function updateChart(chart, url) {
-            let req = await fetch(url)
-            let raw = await req.json()
-            raw.values.reverse()
-            let data = []
-            raw.values.forEach(v => {
-                data.push({
-                    x: v.datetime,
-                    y: v.close
-                })
-            })
-            await chart.updateSeries([{
-                name: 'Test',
-                data: data
-            }])
-        }
     </script>
 </x-app-layout>

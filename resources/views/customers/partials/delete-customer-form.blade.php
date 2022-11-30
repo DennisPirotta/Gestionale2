@@ -3,7 +3,6 @@
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-customer{{$customer->id}}-deletion')"
 >{{__('Delete')}}</x-danger-button>
-
 <x-modal name="confirm-customer{{$customer->id}}-deletion" focusable>
     <form method="post" action="{{ route('customers.destroy',$customer->id) }}" class="p-6">
         @csrf

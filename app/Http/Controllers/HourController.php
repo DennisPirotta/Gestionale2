@@ -12,10 +12,10 @@ use App\Models\Order;
 use App\Models\OrderHour;
 use App\Models\TechnicalReport;
 use App\Models\TechnicalReportHour;
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -55,7 +55,8 @@ class HourController extends Controller
                 ]),
             'period' => CarbonPeriod::create(Carbon::parse(request('month'))->firstOfMonth(),Carbon::parse(request('month'))->lastOfMonth()),
             'hour_types' => HourType::all(),
-            'job_types' => JobType::all()
+            'job_types' => JobType::all(),
+            'users' => User::all()
         ]);
     }
 
@@ -85,29 +86,16 @@ class HourController extends Controller
     public function store(StoreHourRequest $request): Response|RedirectResponse|JsonResponse
     {
         $validated = $request->validated();
-        $validated['user_id'] = $request->get('user_id',auth()->id());
-        $hour = Hour::create($validated);
-        if ($hour->type->id === 1){
-            $details = Validator::make($request->only([ 'extra','job','signed' ]),[
-                'extra' => 'required',
-                'job' => 'required',
-                'signed' => 'nullable'
-            ]);
-            if ($details->fails()){
-                Session::flash('hour_type',$hour->type->id);
-                $hour->delete();
+        if (!isset($validated['date'])){
+            $this->multipleStore($request);
+        }else{
+            $validated['user_id'] = $request->get('user_id',auth()->id());
+            $hour = Hour::create($validated);
+            if ($hour->type->id === 1){
+                $this->storeOrderHour($hour,$request);
+            }else if ($request->get('hour_type_id') === '2'){
+                $this->storeTechnicalReportHour($hour,$request);
             }
-            $this->storeOrderHour($hour->id,$details->validated());
-        }else if ($request->get('hour_type_id') === '2'){
-            $details = Validator::make($request->only(['extra','night']),[
-                'extra' => 'required',
-                'night' => 'required'
-            ]);
-            if ($details->fails()){
-                Session::flash('hour_type',$hour->hour_type_id);
-                $hour->delete();
-            }
-            $this->storeTechnicalReportHour($hour,$details->validated());
         }
         if ($request->ajax()){
             return response('Ora Inserita Correttamente');
@@ -119,9 +107,9 @@ class HourController extends Controller
      * Display the specified resource.
      *
      * @param Hour $hour
-     * @return Response
+     * @return void
      */
-    public function show(Hour $hour)
+    public function show(Hour $hour): void
     {
         //
     }
@@ -130,9 +118,9 @@ class HourController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param Hour $hour
-     * @return Response
+     * @return void
      */
-    public function edit(Hour $hour)
+    public function edit(Hour $hour): void
     {
         //
     }
@@ -183,11 +171,24 @@ class HourController extends Controller
         return back()->with('message','Ora eliminata con successo');
     }
 
-    public function storeOrderHour($hour_id,$info): void
+    /**
+     * @throws ValidationException
+     */
+    public function storeOrderHour(Hour $hour, StoreHourRequest $request): void
     {
+        $details = Validator::make($request->only([ 'extra','job','signed' ]),[
+            'extra' => 'required',
+            'job' => 'required',
+            'signed' => 'nullable'
+        ]);
+        if ($details->fails()){
+            Session::flash('hour_type',$hour->type->id);
+            $hour->delete();
+        }
+        $info = $details->validated();
         $order = Order::find($info['extra']) ?? Order::where('innerCode',$info['extra'])->first();
         OrderHour::create([
-            'hour_id' => $hour_id,
+            'hour_id' => $hour->id,
             'signed' => $info['signed'] ?? false,
             'order_id' => $order->id,
             'job_type_id' => $info['job']
@@ -197,17 +198,19 @@ class HourController extends Controller
     /**
      * @throws ValidationException
      */
-    public function storeTechnicalReportHour(Hour $hour, $info): void
+    public function storeTechnicalReportHour(Hour $hour,StoreHourRequest $request): void
     {
+        $details = Validator::make($request->only(['extra','night']),[
+            'extra' => 'required',
+            'night' => 'required'
+        ]);
+        if ($details->fails()){
+            Session::flash('hour_type',$hour->hour_type_id);
+            $hour->delete();
+        }
+        $info = $details->validated();
         if ($info['extra'] === 'new') {
-            $validated = Validator::make(request()->only(['number','fi_order_id','customer_id','secondary_customer_id']),[
-                'number' => 'required',
-                'fi_order_id' => 'nullable',
-                'customer_id' => 'required',
-                'secondary_customer_id' => 'nullable',
-            ])->validated();
-            $validated['user_id'] = request('user_id',auth()->id());
-            $technical_report = TechnicalReport::create($validated);
+            $technical_report = $this->storeTechnicalReport($request);
         }else{
             $technical_report = TechnicalReport::find($info['extra']) ?? TechnicalReport::where('number',$info['extra'])->first();
         }
@@ -217,5 +220,43 @@ class HourController extends Controller
             'nightXEU' => $info['night'] === 'xeu',
             'technical_report_id' => $technical_report->id
         ]);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function storeTechnicalReport(StoreHourRequest $request): Model|TechnicalReport
+    {
+        $validated = Validator::make($request->only(['number','fi_order_id','customer_id','secondary_customer_id']),[
+            'number' => 'required',
+            'fi_order_id' => 'nullable',
+            'customer_id' => 'required',
+            'secondary_customer_id' => 'nullable',
+        ])->validated();
+        $validated['user_id'] = $request->get('user_id',auth()->id());
+        return TechnicalReport::where('number',$validated['number'])->exists() ? TechnicalReport::where('number',$validated['number'])->first() : TechnicalReport::create($validated);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function multipleStore(StoreHourRequest $request): void
+    {
+        $validated = $request->validated();
+        $period = CarbonPeriod::create($validated['start'],$validated['end']);
+        foreach ($period as $day){
+            $hour = Hour::create([
+                'count' => $validated['count'],
+                'date' => $day->format('Y-m-d'),
+                'hour_type_id' => $validated['hour_type_id'],
+                'description' => $validated['description'],
+                'user_id' => $request->get('user_id',auth()->id())
+            ]);
+            if ($hour->type->id === 1){
+                $this->storeOrderHour($hour,$request);
+            }elseif ($hour->type->id === 2){
+                $this->storeTechnicalReportHour($hour,$request);
+            }
+        }
     }
 }

@@ -23,8 +23,8 @@
         </div>
     </div>
     <x-speed-dial>
-        <x-speed-dial-option :route="route('customers.create')" :icon="config('constants.icons.customers.new')"/>
-        <x-speed-dial-tooltip :message="'New Customer'"/>
+        <x-speed-dial-option :route="route('customers.create')" :icon="config('constants.icons.customers.new')" :target="'new_customer'"/>
+        <x-speed-dial-tooltip :message="__('New Customer')" :tooltip="'new_customer'"/>
     </x-speed-dial>
     @if(Session::has('message'))
         <x-flash-message :target="session('target')" :message="session('message')"></x-flash-message>

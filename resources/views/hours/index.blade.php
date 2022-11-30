@@ -1,29 +1,36 @@
-@php use App\Models\HourType;use App\Models\Order; @endphp
+@php use App\Models\Order;use App\Models\TechnicalReport;use App\Models\User;use Carbon\Carbon @endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex">
             <span class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight flex items-center">
                 {{ __('Hours') }}
+                {{ request('user') !== null ? User::find(request('user'))->name : auth()->user()->name }}
+                -
+                {{ request('month') !== null ? Carbon::parse(request('month'))->translatedFormat('F Y') : __('Select a month') }}
             </span>
 
-            <div class="ml-auto">
-                <form id="month-form">
-                    <label>
-                        <input type="month" id="month" name="month"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="{{__('Select date')}}" value="{{ request('month') }}">
-                    </label>
-                </form>
-            </div>
-
+            <form class="ml-auto flex" id="query">
+                <label>
+                    <input type="month" id="month" name="month"
+                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                           placeholder="{{__('Select date')}}" value="{{ request('month') }}">
+                </label>
+                <select id="users" name="user"
+                        class="ml-2 w-44 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}"
+                                @if(request('user') == $user->id) selected @endif >{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </form>
         </div>
     </x-slot>
     <div class="py-12">
         <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-gray-900 dark:text-gray-100 relative">
                     @unless($data->count() === 0 || !request('month'))
-                        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                        <div class="overflow-x-auto shadow-md sm:rounded-lg">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 text-center">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -45,7 +52,8 @@
                                     @foreach($type as $key=>$content)
                                         @foreach($content as $job_type=>$hours)
                                             <tr class="bg-gray-100 dark:bg-gray-900 dark:border-gray-800 border-b">
-                                                <td class="border-r dark:border-gray-700 p-1.5 grid grid-cols-1 place-items-center">
+                                                <th scope="row"
+                                                    class="border-r dark:border-gray-700 p-1.5 grid grid-cols-1 place-items-center">
                                                     <div class="font-bold">
                                                         {{ $key !== 0 ? $key : '' }}
                                                     </div>
@@ -58,12 +66,17 @@
                                                             {{ Order::where('innerCode',$key)->first()->customer->name }}
                                                         </div>
                                                     @endif
+                                                    @if(TechnicalReport::where('number',$key)->exists())
+                                                        <div>
+                                                            {{ TechnicalReport::where('number',$key)->first()->customer->name }}
+                                                        </div>
+                                                    @endif
                                                     @if(is_string($job_type))
                                                         <div class="w-15 dark:bg-blue-100 bg-blue-300 text-blue-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
                                                             {{ $job_type }}
                                                         </div>
                                                     @endif
-                                                </td>
+                                                </th>
                                                 @foreach($period as $day)
                                                     <td class="border-r dark:border-gray-700"
                                                         data-datetime="{{ $day->format('Y-m-d') }}"
@@ -96,8 +109,12 @@
         </div>
     </div>
     <x-speed-dial>
-        <x-speed-dial-option :route="route('hours.create')" :icon="config('constants.icons.hours.new')"/>
-        <x-speed-dial-tooltip :message="'New Hour'"/>
+        <x-speed-dial-option :route="route('hours.create')" :icon="config('constants.icons.hours.new')"
+                             :target="'new_hour'"/>
+        <x-speed-dial-option :route="'javascript:window.print()'" :icon="config('constants.icons.printer')"
+                             :target="'print'"/>
+        <x-speed-dial-tooltip :message="__('New Hour')" :tooltip="'new_hour'"/>
+        <x-speed-dial-tooltip :message="__('Print')" :tooltip="'print'"/>
     </x-speed-dial>
     {{--    <x-flash-message></x-flash-message>--}}
     <script>
@@ -146,8 +163,8 @@
                     $(e.target).blur()
                 }
             })
-            $('#month').change(() => {
-                $('#month-form').submit()
+            $('#query input,select').change(() => {
+                $('#query').submit()
             })
         })
     </script>

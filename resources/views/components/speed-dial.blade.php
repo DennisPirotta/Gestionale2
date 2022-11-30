@@ -1,4 +1,4 @@
-<div data-dial-init class="fixed right-6 bottom-6 group">
+<div data-dial-init class="fixed right-6 bottom-6 group speed-dial">
     <div id="speed-dial-menu-default" class="flex hidden flex-col items-center mb-4 space-y-2">
         {{ $slot }}
     </div>

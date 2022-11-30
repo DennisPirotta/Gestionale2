@@ -1,6 +1,7 @@
 @import "../css/app.css";
-html{
+@import "fullcalendar.scss";
 
+html{
   &.dark{
     input{
       color-scheme: dark;
