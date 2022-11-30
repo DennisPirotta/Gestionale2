@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
+use Spatie\ModelFlags\Models\Concerns\HasFlags;
 
 /**
  * App\Models\User
@@ -59,10 +60,18 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read int|null $hours_count
  * @property-read Collection|TechnicalReport[] $technical_reports
  * @property-read int|null $technical_reports_count
+ * @property string|null $image
+ * @property-read Collection|\Spatie\ModelFlags\Models\Flag[] $flags
+ * @property-read int|null $flags_count
+ * @property-read Collection|\App\Models\Location[] $locations
+ * @property-read int|null $locations_count
+ * @method static Builder|User flagged(string $name)
+ * @method static Builder|User notFlagged(string $name)
+ * @method static Builder|User whereImage($value)
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasFlags;
 
     /**
      * The attributes that are mass assignable.
@@ -116,7 +125,12 @@ class User extends Authenticatable
         return $this->hasMany(TechnicalReport::class,'user_id');
     }
 
-    public function hoursInPeriod(CarbonPeriod $period)
+    public function locations(): HasMany
+    {
+        return $this->hasMany(Location::class,'user_id');
+    }
+
+    public function hoursInPeriod(CarbonPeriod $period): Collection
     {
         return $this->hours->whereBetween('date',[$period->first(),$period->last()]);
     }

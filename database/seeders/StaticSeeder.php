@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\Exchange;
 use App\Models\HourType;
 use App\Models\JobType;
 use App\Models\Status;
@@ -305,7 +306,7 @@ class StaticSeeder extends Seeder
             ['description' => 'Chiusa']
         )->create();
 
-        //Add hour types
+        // Add hour types
         HourType::factory()->count(10)->sequence(
             ['description' => 'Commessa'],
             ['description' => 'Foglio intervento'],
@@ -318,6 +319,9 @@ class StaticSeeder extends Seeder
             ['description' => 'Visita medica'],
             ['description' => 'Altro']
         )->create();
+
+        // Add last year exchange rates
+        Exchange::uploadLastYearData();
 
     }
 }

@@ -3,14 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Exchange;
 use App\Models\Hour;
 use App\Models\Order;
 use App\Models\OrderHour;
 use App\Models\TechnicalReport;
 use App\Models\TechnicalReportHour;
 use App\Models\User;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use JsonException;
 
 class DatabaseSeeder extends Seeder
 {

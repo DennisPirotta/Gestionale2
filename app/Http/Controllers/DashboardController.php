@@ -23,9 +23,8 @@ class DashboardController extends Controller
     public function index(): Response
     {
          return response()->view('dashboard',[
-             'eur_chf' => $this->requireData('EUR/CHF'),
-             'eur_usd' => $this->requireData('EUR/USD'),
-             'usd_chf' => $this->requireData('USD/CHF'),
+             'exchanges' => Exchange::getDataForChart(),
+             'last' => Exchange::all()->first()->value('value')
          ]);
     }
 
@@ -95,20 +94,4 @@ class DashboardController extends Controller
         //
     }
 
-    /**
-     * @throws GuzzleException
-     * @throws JsonException
-     */
-    private function requireData($symbol): array
-    {
-        $exchanges = Exchange::where('symbol',$symbol)->orderBy('datetime')->take(1000)->get();
-        $data = [];
-        foreach ($exchanges as $exchange) {
-            $data[] = [
-                'x' => $exchange->datetime,
-                'y' => $exchange->value,
-            ];
-        }
-        return $data;
-    }
 }
