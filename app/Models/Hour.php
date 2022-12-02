@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
-
 /**
  * App\Models\Hour
  *
@@ -21,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static HourFactory factory(...$parameters)
  * @method static Builder|Hour newModelQuery()
  * @method static Builder|Hour newQuery()
@@ -32,10 +32,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Hour whereId($value)
  * @method static Builder|Hour whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property int $hour_type_id
  * @property int $user_id
  * @property-read HourType $type
  * @property-read User $user
+ *
  * @method static Builder|Hour filter(array $filters)
  * @method static Builder|Hour whereHourTypeId($value)
  * @method static Builder|Hour whereUserId($value)
@@ -45,17 +47,17 @@ class Hour extends Model
     use HasFactory;
 
     protected $fillable = [
-        'count', 'date', 'description', 'user_id', 'hour_type_id'
+        'count', 'date', 'description', 'user_id', 'hour_type_id',
     ];
 
     public function scopeFilter($query, array $filters): void
     {
-        if ($filters['month'] ?? false){
-            $period = CarbonPeriod::create(Carbon::parse(request('month'))->firstOfMonth(),Carbon::parse(request('month'))->lastOfMonth());
-            $query->whereBetween('date',[$period->first(),$period->last()]);
+        if ($filters['month'] ?? false) {
+            $period = CarbonPeriod::create(Carbon::parse(request('month'))->firstOfMonth(), Carbon::parse(request('month'))->lastOfMonth());
+            $query->whereBetween('date', [$period->first(), $period->last()]);
         }
-        if ($filters['user'] ?? false){
-            $query->where('user_id',request('user'));
+        if ($filters['user'] ?? false) {
+            $query->where('user_id', request('user'));
         }
     }
 
@@ -66,17 +68,16 @@ class Hour extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(HourType::class,'hour_type_id');
+        return $this->belongsTo(HourType::class, 'hour_type_id');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function technical_report_hour(): TechnicalReportHour|null
     {
-        return TechnicalReportHour::with('technical_report','hour')->where('hour_id', $this->id)->get()->first();
+        return TechnicalReportHour::with('technical_report', 'hour')->where('hour_id', $this->id)->get()->first();
     }
-
 }

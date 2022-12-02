@@ -28,7 +28,7 @@ class StaticSeeder extends Seeder
             [
                 'name' => 'SPH Technology',
                 'short' => 'SPH',
-                'holidays' => 160
+                'holidays' => 160,
             ]
         )->create();
 
@@ -322,6 +322,5 @@ class StaticSeeder extends Seeder
 
         // Add last year exchange rates
         Exchange::uploadLastYearData();
-
     }
 }

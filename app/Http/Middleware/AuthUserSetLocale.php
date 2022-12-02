@@ -15,8 +15,8 @@ class AuthUserSetLocale
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return Response|RedirectResponse|JsonResponse
      */
     public function handle(Request $request, Closure $next): Response|RedirectResponse|JsonResponse
@@ -24,6 +24,7 @@ class AuthUserSetLocale
         if (Auth::check()) {
             App::setLocale(Auth::user()->language);
         }
+
         return $next($request);
     }
 }

@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property-read Order|null $order
  * @property-read Customer|null $secondary_customer
  * @property-read User $user
+ *
  * @method static TechnicalReportFactory factory(...$parameters)
  * @method static Builder|TechnicalReport newModelQuery()
  * @method static Builder|TechnicalReport newQuery()
@@ -44,26 +45,26 @@ class TechnicalReport extends Model
     use HasFactory;
 
     protected $fillable = [
-        'number','customer_id','user_id','secondary_customer_id','order_id'
+        'number', 'customer_id', 'user_id', 'secondary_customer_id', 'order_id',
     ];
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class,'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function secondary_customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class,'secondary_customer_id');
+        return $this->belongsTo(Customer::class, 'secondary_customer_id');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class,'order_id');
+        return $this->belongsTo(Order::class, 'order_id');
     }
 }

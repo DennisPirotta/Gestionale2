@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static HourTypeFactory factory(...$parameters)
  * @method static Builder|HourType newModelQuery()
  * @method static Builder|HourType newQuery()
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|HourType whereId($value)
  * @method static Builder|HourType whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property-read Collection|Hour[] $hours
  * @property-read int|null $hours_count
  */
@@ -35,11 +37,11 @@ class HourType extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description'
+        'description',
     ];
 
     public function hours(): HasMany
     {
-        return $this->hasMany(Hour::class,'hour_type_id');
+        return $this->hasMany(Hour::class, 'hour_type_id');
     }
 }

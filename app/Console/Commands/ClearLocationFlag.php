@@ -29,7 +29,8 @@ class ClearLocationFlag extends Command
      */
     public function handle(): int
     {
-        Flag::where('name','location')->delete();
+        Flag::where('name', 'location')->delete();
+
         return CommandAlias::SUCCESS;
     }
 }

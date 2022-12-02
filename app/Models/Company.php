@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $orders_count
  * @property-read Collection|User[] $users
  * @property-read int|null $users_count
+ *
  * @method static CompanyFactory factory(...$parameters)
  * @method static Builder|Company newModelQuery()
  * @method static Builder|Company newQuery()
@@ -35,7 +36,7 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'short', 'holidays'
+        'name', 'short', 'holidays',
     ];
 
     public function users(): HasMany

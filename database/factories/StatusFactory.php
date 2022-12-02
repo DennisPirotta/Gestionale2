@@ -18,7 +18,7 @@ class StatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => fake()->text(15)
+            'description' => fake()->text(15),
         ];
     }
 }

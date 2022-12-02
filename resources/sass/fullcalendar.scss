@@ -10,6 +10,7 @@ html{
             color: #dbd7d7;
         }
         --fc-border-color: #989696;
+        --fc-today-bg-color: rgba(238, 211, 175, 0.09);
     }
     .fc-event-title-container{
         cursor: pointer;
@@ -23,7 +24,6 @@ html{
     .fc-toolbar-title{
         color: black;
     }
-    --fc-border-color: black;
-    --fc-highlight-color: rgba(188, 232, 241, 0.3);
-    --fc-today-bg-color: rgba(238, 211, 175, 0.09);
+    --fc-highlight-color: rgba(49, 215, 255, 0.15);
+    --fc-today-bg-color: rgba(238, 211, 175, 0.2);
 }

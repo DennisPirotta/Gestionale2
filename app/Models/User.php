@@ -41,6 +41,7 @@ use Spatie\ModelFlags\Models\Concerns\HasFlags;
  * @property-read int|null $orders_count
  * @property-read Collection|PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ *
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -56,6 +57,7 @@ use Spatie\ModelFlags\Models\Concerns\HasFlags;
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property-read Collection|Hour[] $hours
  * @property-read int|null $hours_count
  * @property-read Collection|TechnicalReport[] $technical_reports
@@ -65,6 +67,7 @@ use Spatie\ModelFlags\Models\Concerns\HasFlags;
  * @property-read int|null $flags_count
  * @property-read Collection|\App\Models\Location[] $locations
  * @property-read int|null $locations_count
+ *
  * @method static Builder|User flagged(string $name)
  * @method static Builder|User notFlagged(string $name)
  * @method static Builder|User whereImage($value)
@@ -83,7 +86,7 @@ class User extends Authenticatable
         'email',
         'password',
         'language',
-        'image'
+        'image',
     ];
 
     /**
@@ -117,22 +120,22 @@ class User extends Authenticatable
 
     public function hours(): HasMany
     {
-        return $this->hasMany(Hour::class,'user_id');
+        return $this->hasMany(Hour::class, 'user_id');
     }
 
     public function technical_reports(): HasMany
     {
-        return $this->hasMany(TechnicalReport::class,'user_id');
+        return $this->hasMany(TechnicalReport::class, 'user_id');
     }
 
     public function locations(): HasMany
     {
-        return $this->hasMany(Location::class,'user_id');
+        return $this->hasMany(Location::class, 'user_id');
     }
 
     public function hoursInPeriod(CarbonPeriod $period): Collection
     {
-        return $this->hours->whereBetween('date',[$period->first(),$period->last()]);
+        return $this->hours->whereBetween('date', [$period->first(), $period->last()]);
     }
 
     public function clearImage(): void
@@ -144,11 +147,11 @@ class User extends Authenticatable
 
     public function hasImage(): bool
     {
-        return $this->image !== null && File::exists(public_path('storage/images/users/' . $this->image));
+        return $this->image !== null && File::exists(public_path('storage/images/users/'.$this->image));
     }
 
     public function deleteImage(): void
     {
-        File::delete(public_path('storage/images/users/' . $this->image));
+        File::delete(public_path('storage/images/users/'.$this->image));
     }
 }

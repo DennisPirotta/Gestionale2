@@ -7,6 +7,9 @@ export default defineConfig({
             input: [
                 'resources/sass/app.scss',
                 'resources/js/app.js',
+                'resources/js/fullcalendar.js',
+                'resources/js/flowbite.js',
+                'resources/js/apexcharts.js',
             ],
             refresh: [
                 'resources/routes/**',

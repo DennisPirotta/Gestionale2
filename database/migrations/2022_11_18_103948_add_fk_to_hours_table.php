@@ -14,12 +14,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hours', static function (Blueprint $table) {
-            $table  ->foreignId('hour_type_id')
+            $table->foreignId('hour_type_id')
                     ->constrained()
                     ->cascadeOnDelete()
                     ->cascadeOnUpdate();
 
-            $table  ->foreignId('user_id')
+            $table->foreignId('user_id')
                     ->constrained()
                     ->cascadeOnDelete()
                     ->cascadeOnUpdate();

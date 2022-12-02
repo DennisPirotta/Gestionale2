@@ -18,10 +18,11 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         $name = fake()->company;
+
         return [
             'name' => $name,
             'short' => str_split($name, 3)[0],
-            'holidays' => 240
+            'holidays' => 240,
         ];
     }
 }

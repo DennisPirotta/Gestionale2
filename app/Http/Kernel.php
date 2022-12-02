@@ -59,7 +59,7 @@ class Kernel extends HttpKernel
             AddQueuedCookiesToResponse::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
-            AuthUserSetLocale::class
+            AuthUserSetLocale::class,
         ],
 
         'api' => [

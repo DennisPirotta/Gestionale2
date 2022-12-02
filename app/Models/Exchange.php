@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property float $value
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Exchange newModelQuery()
  * @method static Builder|Exchange newQuery()
  * @method static Builder|Exchange query()
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Exchange whereUpdatedAt($value)
  * @method static Builder|Exchange whereValue($value)
  * @mixin Eloquent
+ *
  * @method static \Database\Factories\ExchangeFactory factory(...$parameters)
  */
 class Exchange extends Model
@@ -37,7 +39,7 @@ class Exchange extends Model
     use HasFactory;
 
     protected $fillable = [
-        'value','datetime'
+        'value', 'datetime',
     ];
 
     public static function getDataForChart(): array
@@ -49,6 +51,7 @@ class Exchange extends Model
                 'y' => $exchange->value,
             ];
         }
+
         return $data;
     }
 
@@ -56,22 +59,23 @@ class Exchange extends Model
     {
         try {
             $client = new Client();
-            $response = $client->request('GET',config('constants.api.exchange.endpoint'),['query' => [
+            $response = $client->request('GET', config('constants.api.exchange.endpoint'), ['query' => [
                 'apikey' => config('constants.api.exchange.key'),
                 'interval' => '4h',
                 'symbol' => 'EUR/CHF',
                 'start_date' => Carbon::today()->subYear()->format('Y-m-d H:m:s'),
                 'end_date' => Carbon::today()->format('Y-m-d H:m:s'),
                 'format' => 'JSON',
-                'timezone' => 'Europe/Rome'
+                'timezone' => 'Europe/Rome',
             ]]);
             $data = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-            foreach ($data['values'] as $record){
+            foreach ($data['values'] as $record) {
                 self::create([
                     'value' => $record['close'],
                     'datetime' => $record['datetime'],
                 ]);
             }
-        }catch (Exception|GuzzleException){}
+        } catch (Exception|GuzzleException) {
+        }
     }
 }

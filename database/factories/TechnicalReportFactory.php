@@ -18,16 +18,17 @@ class TechnicalReportFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     *
      * @throws Exception
      */
     public function definition(): array
     {
         return [
-            'number' => fake()->unique()->numberBetween(100000,999999),
+            'number' => fake()->unique()->numberBetween(100000, 999999),
             'order_id' => Order::all()->random()->id,
             'user_id' => User::all()->random()->id,
             'customer_id' => Customer::all()->random()->id,
-            'secondary_customer_id' => random_int(0,1) === 1 ? null : Customer::all()->random()->id
+            'secondary_customer_id' => random_int(0, 1) === 1 ? null : Customer::all()->random()->id,
         ];
     }
 }

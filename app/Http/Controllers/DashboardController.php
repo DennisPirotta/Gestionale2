@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exchange;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use JsonException;
 
 class DashboardController extends Controller
@@ -17,15 +14,16 @@ class DashboardController extends Controller
      * Display a listing of the resource.
      *
      * @return Response
+     *
      * @throws GuzzleException
      * @throws JsonException
      */
     public function index(): Response
     {
-         return response()->view('dashboard',[
-             'exchanges' => Exchange::getDataForChart(),
-             'last' => Exchange::all()->first()->value('value')
-         ]);
+        return response()->view('dashboard', [
+            'exchanges' => Exchange::getDataForChart(),
+            'last' => Exchange::all()->first()->value('value'),
+        ]);
     }
 
     /**
@@ -41,7 +39,7 @@ class DashboardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      */
     public function store(Request $request)
@@ -74,7 +72,7 @@ class DashboardController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @param  int  $id
      * @return Response
      */
@@ -93,5 +91,4 @@ class DashboardController extends Controller
     {
         //
     }
-
 }

@@ -34,6 +34,7 @@
             let edit_datepicker = new Datepicker(edit_date, options)
             let calendarEvents = {
                 select: function (info) {
+                    if (info)
                     info.jsEvent.target.dispatchEvent(new CustomEvent('open-modal', {
                         detail: 'add_record',
                         bubbles: true

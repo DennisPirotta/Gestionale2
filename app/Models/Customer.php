@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\File;
  * @property Carbon|null $updated_at
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
+ *
  * @method static CustomerFactory factory(...$parameters)
  * @method static Builder|Customer newModelQuery()
  * @method static Builder|Customer newQuery()
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\File;
  * @method static Builder|Customer whereName($value)
  * @method static Builder|Customer whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property-read Collection|TechnicalReport[] $technical_reports
  * @property-read int|null $technical_reports_count
  */
@@ -40,7 +42,7 @@ class Customer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'image'
+        'name', 'image',
     ];
 
     public function orders(): HasMany
@@ -50,9 +52,8 @@ class Customer extends Model
 
     public function technical_reports(): HasMany
     {
-        return $this->hasMany(TechnicalReport::class,'customer_id');
+        return $this->hasMany(TechnicalReport::class, 'customer_id');
     }
-
 
     public function clearImage(): void
     {
@@ -63,13 +64,11 @@ class Customer extends Model
 
     public function hasImage(): bool
     {
-        return $this->image !== null && File::exists(public_path('storage/images/customers/' . $this->image));
+        return $this->image !== null && File::exists(public_path('storage/images/customers/'.$this->image));
     }
 
     public function deleteImage(): void
     {
-        File::delete(public_path('storage/images/customers/' . $this->image));
+        File::delete(public_path('storage/images/customers/'.$this->image));
     }
-
-
 }

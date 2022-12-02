@@ -14,29 +14,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('technical_reports', static function (Blueprint $table) {
-
-            $table  ->foreignId('customer_id')
+            $table->foreignId('customer_id')
                     ->constrained()
                     ->cascadeOnUpdate()
                     ->cascadeOnDelete();
 
-            $table  ->foreignId('user_id')
+            $table->foreignId('user_id')
                     ->constrained()
                     ->cascadeOnUpdate()
                     ->cascadeOnDelete();
 
-            $table  ->foreignId('secondary_customer_id')
+            $table->foreignId('secondary_customer_id')
                     ->nullable()
                     ->constrained('customers')
                     ->cascadeOnUpdate()
                     ->cascadeOnDelete();
 
-            $table  ->foreignId('order_id')
+            $table->foreignId('order_id')
                     ->nullable()
                     ->constrained()
                     ->cascadeOnUpdate()
                     ->cascadeOnDelete();
-
         });
     }
 

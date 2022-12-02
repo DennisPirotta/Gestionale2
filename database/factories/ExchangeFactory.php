@@ -18,8 +18,8 @@ class ExchangeFactory extends Factory
     public function definition(): array
     {
         return [
-            'value' => fake()->randomFloat(null,0.8,1.2),
-            'datetime' => fake()->dateTime
+            'value' => fake()->randomFloat(null, 0.8, 1.2),
+            'datetime' => fake()->dateTime,
         ];
     }
 }

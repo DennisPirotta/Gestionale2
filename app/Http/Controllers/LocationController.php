@@ -20,21 +20,22 @@ class LocationController extends Controller
      */
     public function index(): Application|Factory|View
     {
-        $locations = User::find(request('user')) ? User::find(request('user'))->locations : $locations = Location::all();;
+        $locations = User::find(request('user')) ? User::find(request('user'))->locations : $locations = Location::all();
         $events = [];
         foreach ($locations as $location) {
             $events[] = [
                 'id' => $location->id,
                 'start' => $location->date,
-                'title' => $location->user->name . ' - ' . $location->description,
+                'title' => $location->user->name.' - '.$location->description,
                 'extendedProps' => [
-                    'content' => $location->description
-                ]
+                    'content' => $location->description,
+                ],
             ];
         }
-        return view('locations.index',[
+
+        return view('locations.index', [
             'locations' => Location::all(),
-            'events' => $events
+            'events' => $events,
         ]);
     }
 
@@ -51,28 +52,29 @@ class LocationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'location' => 'required',
-            'date' => 'required'
+            'date' => 'required',
         ]);
         Location::create([
             'description' => $validated['location'],
             'date' => $validated['date'],
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
         ]);
         auth()->user()->flag('location');
-        return back()->with('message',__('Location set correctly'));
+
+        return back()->with('message', __('Location set correctly'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Location $location
+     * @param  Location  $location
      * @return Response
      */
     public function show(Location $location)
@@ -83,7 +85,7 @@ class LocationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Location $location
+     * @param  Location  $location
      * @return Response
      */
     public function edit(Location $location)
@@ -94,33 +96,35 @@ class LocationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Location $location
+     * @param  Request  $request
+     * @param  Location  $location
      * @return RedirectResponse
      */
     public function update(Request $request, Location $location): RedirectResponse
     {
         $validated = $request->validate([
             'location' => 'required',
-            'date' => 'required'
+            'date' => 'required',
         ]);
         $location->update([
             'description' => $validated['location'],
             'date' => $validated['date'],
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
         ]);
-        return back()->with('message','Posizione modificata con successo');
+
+        return back()->with('message', 'Posizione modificata con successo');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Location $location
+     * @param  Location  $location
      * @return RedirectResponse
      */
     public function destroy(Location $location): RedirectResponse
     {
         $location->delete();
-        return back()->with('message','Posizione eliminata con successo');
+
+        return back()->with('message', 'Posizione eliminata con successo');
     }
 }

@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
+ *
  * @method static CountryFactory factory(...$parameters)
  * @method static Builder|Country newModelQuery()
  * @method static Builder|Country newQuery()
@@ -37,7 +38,7 @@ class Country extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'code'
+        'name', 'code',
     ];
 
     public function orders(): HasMany

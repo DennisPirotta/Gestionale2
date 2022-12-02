@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
-
 /**
  * App\Models\OrderHour
  *
@@ -24,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property-read Hour $hour
  * @property-read JobType $job_type
  * @property-read Order $order
+ *
  * @method static OrderHourFactory factory(...$parameters)
  * @method static Builder|OrderHour newModelQuery()
  * @method static Builder|OrderHour newQuery()
@@ -42,7 +42,7 @@ class OrderHour extends Model
     use HasFactory;
 
     protected $fillable = [
-        'signed', 'order_id', 'hour_id', 'job_type_id'
+        'signed', 'order_id', 'hour_id', 'job_type_id',
     ];
 
     public function order(): BelongsTo
@@ -59,6 +59,4 @@ class OrderHour extends Model
     {
         return $this->belongsTo(JobType::class, 'job_type_id');
     }
-
-
 }

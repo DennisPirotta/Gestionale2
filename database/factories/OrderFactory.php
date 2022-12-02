@@ -24,7 +24,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'innerCode' => fake()->unique()->numberBetween(20220000,20229999),
+            'innerCode' => fake()->unique()->numberBetween(20220000, 20229999),
             'outerCode' => fake()->text(8),
             'open' => fake()->date,
             'close' => fake()->date,

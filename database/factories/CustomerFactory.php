@@ -19,7 +19,7 @@ class CustomerFactory extends Factory
     {
         return [
             'name' => fake()->name,
-            'image' => null
+            'image' => null,
         ];
     }
 }

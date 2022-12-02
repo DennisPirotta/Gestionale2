@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
+ *
  * @method static JobTypeFactory factory(...$parameters)
  * @method static Builder|JobType newModelQuery()
  * @method static Builder|JobType newQuery()
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|JobType whereTitle($value)
  * @method static Builder|JobType whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property-read Collection|OrderHour[] $hours
  * @property-read int|null $hours_count
  */
@@ -39,7 +41,7 @@ class JobType extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description', 'title'
+        'description', 'title',
     ];
 
     public function orders(): HasMany

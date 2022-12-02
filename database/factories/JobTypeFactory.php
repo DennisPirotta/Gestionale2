@@ -19,7 +19,7 @@ class JobTypeFactory extends Factory
     {
         return [
             'description' => fake()->text(20),
-            'title' => fake()->text(5)
+            'title' => fake()->text(5),
         ];
     }
 }

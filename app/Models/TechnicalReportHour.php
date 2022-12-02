@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property int $technical_report_id
  * @property-read Hour $hour
  * @property-read TechnicalReport $technical_report
+ *
  * @method static TechnicalReportHourFactory factory(...$parameters)
  * @method static Builder|TechnicalReportHour newModelQuery()
  * @method static Builder|TechnicalReportHour newQuery()
@@ -40,16 +41,16 @@ class TechnicalReportHour extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nightEU','nightXEU', 'hour_id','technical_report_id'
+        'nightEU', 'nightXEU', 'hour_id', 'technical_report_id',
     ];
 
     public function hour(): BelongsTo
     {
-        return $this->belongsTo(Hour::class,'hour_id');
+        return $this->belongsTo(Hour::class, 'hour_id');
     }
 
     public function technical_report(): BelongsTo
     {
-        return $this->belongsTo(TechnicalReport::class,'technical_report_id');
+        return $this->belongsTo(TechnicalReport::class, 'technical_report_id');
     }
 }

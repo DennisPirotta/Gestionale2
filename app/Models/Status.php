@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
+ *
  * @method static StatusFactory factory(...$parameters)
  * @method static Builder|Status newModelQuery()
  * @method static Builder|Status newQuery()
@@ -35,7 +36,7 @@ class Status extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description'
+        'description',
     ];
 
     public function orders(): HasMany

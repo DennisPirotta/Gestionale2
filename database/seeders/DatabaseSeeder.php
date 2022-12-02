@@ -3,17 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
-use App\Models\Exchange;
 use App\Models\Hour;
 use App\Models\Order;
 use App\Models\OrderHour;
 use App\Models\TechnicalReport;
 use App\Models\TechnicalReportHour;
 use App\Models\User;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use JsonException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -29,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Dennis',
             'email' => 'dennispirotta@gmail.com',
             'password' => Hash::make('pellio2014'),
-            'company_id' => 1
+            'company_id' => 1,
         ]);                          // Dennis Account
         Customer::factory(5)->create();               // Test Customers
         Order::factory(30)->create();                 // Test Orders

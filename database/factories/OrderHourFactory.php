@@ -22,9 +22,9 @@ class OrderHourFactory extends Factory
     {
         return [
             'order_id' => Order::all()->random(),
-            'hour_id' =>  Hour::factory()->create([ 'hour_type_id' => 1 ]),
+            'hour_id' => Hour::factory()->create(['hour_type_id' => 1]),
             'job_type_id' => JobType::all()->random(),
-            'signed' => fake()->boolean
+            'signed' => fake()->boolean,
         ];
     }
 }

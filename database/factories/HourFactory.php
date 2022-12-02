@@ -20,11 +20,11 @@ class HourFactory extends Factory
     public function definition(): array
     {
         return [
-            'count' => fake()->numberBetween(2,10),
+            'count' => fake()->numberBetween(2, 10),
             'date' => fake()->unique()->dateTimeThisMonth,
             'description' => fake()->text(10),
             'hour_type_id' => HourType::all()->random()->id,
-            'user_id' => User::all()->random()->id
+            'user_id' => User::all()->random()->id,
         ];
     }
 }

@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property-read JobType $job_type
  * @property-read Status $status
  * @property-read User $user
+ *
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -57,6 +58,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
  * @mixin Eloquent
+ *
  * @property-read Collection|OrderHour[] $hours
  * @property-read int|null $hours_count
  * @property-read Collection|TechnicalReport[] $technical_reports
@@ -67,7 +69,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'innerCode', 'outerCode', 'open', 'close', 'description'
+        'innerCode', 'outerCode', 'open', 'close', 'description',
     ];
 
     public function customer(): BelongsTo
@@ -112,6 +114,6 @@ class Order extends Model
 
     public function technical_reports(): HasMany
     {
-        return $this->hasMany(TechnicalReport::class,'order_id');
+        return $this->hasMany(TechnicalReport::class, 'order_id');
     }
 }

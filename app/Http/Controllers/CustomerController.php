@@ -18,22 +18,23 @@ class CustomerController extends Controller
     public function index(): Response
     {
         $customers = Customer::all();
+
         return response()->view('customers.index', [
-            'customers' => $customers
+            'customers' => $customers,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'mimes:png,jpg,jpeg,svg'
+            'image' => 'mimes:png,jpg,jpeg,svg',
         ]);
         $image = null;
         if ($request->hasFile('image')) {
@@ -42,9 +43,10 @@ class CustomerController extends Controller
         }
         $new = Customer::factory()->create([
             'name' => $request->get('name'),
-            'image' => $image
+            'image' => $image,
         ]);
         session()->flash('target', $new);
+
         return redirect()->route('customers.index')->with('message', 'Cliente inserito con successo');
     }
 
@@ -61,28 +63,28 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Customer $customer
+     * @param  Customer  $customer
      * @return Response
      */
     public function edit(Customer $customer): Response
     {
         return response()->view('customers.edit', [
-            'customer' => $customer
+            'customer' => $customer,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Customer $customer
+     * @param  Request  $request
+     * @param  Customer  $customer
      * @return RedirectResponse
      */
     public function update(Request $request, Customer $customer): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'mimes:png,jpg,jpeg,svg'
+            'image' => 'mimes:png,jpg,jpeg,svg',
         ]);
         if ($request->hasFile('image')) {
             $request->file('image')->storePublicly('public/images/customers');
@@ -94,25 +96,27 @@ class CustomerController extends Controller
         }
         $customer->update(['name' => $request->get('name')]);
         session()->flash('target', $customer);
+
         return redirect()->route('customers.index')->with('message', 'Cliente aggiornato con successo');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Customer $customer
+     * @param  Customer  $customer
      * @return RedirectResponse
      */
     public function destroy(Customer $customer): RedirectResponse
     {
         if ($customer->hasImage()) {
-            $image = File::get('storage/images/customers/' . $customer->image);
-            $type = File::mimeType('storage/images/customers/' . $customer->image);
-            session()->flash('image', 'data:' . $type . ';base64,' . base64_encode($image));
+            $image = File::get('storage/images/customers/'.$customer->image);
+            $type = File::mimeType('storage/images/customers/'.$customer->image);
+            session()->flash('image', 'data:'.$type.';base64,'.base64_encode($image));
             $customer->deleteImage();
         }
         $customer->delete();
         session()->flash('target', $customer);
+
         return back()->with('message', 'Cliente eliminato con successo');
     }
 }

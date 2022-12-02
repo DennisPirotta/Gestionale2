@@ -30,7 +30,7 @@ class OrderHourController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +41,7 @@ class OrderHourController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\OrderHour $orderHour
+     * @param  \App\Models\OrderHour  $orderHour
      * @return \Illuminate\Http\Response
      */
     public function show(OrderHour $orderHour)
@@ -52,7 +52,7 @@ class OrderHourController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\OrderHour $orderHour
+     * @param  \App\Models\OrderHour  $orderHour
      * @return \Illuminate\Http\Response
      */
     public function edit(OrderHour $orderHour)
@@ -63,8 +63,8 @@ class OrderHourController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\OrderHour $orderHour
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\OrderHour  $orderHour
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, OrderHour $orderHour)
@@ -75,7 +75,7 @@ class OrderHourController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\OrderHour $orderHour
+     * @param  \App\Models\OrderHour  $orderHour
      * @return \Illuminate\Http\Response
      */
     public function destroy(OrderHour $orderHour)
