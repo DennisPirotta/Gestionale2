@@ -9,6 +9,7 @@ module.exports = {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.css",
+        "./resources/**/*.scss",
         "./resources/**/*.vue",
         "./node_modules/flowbite/**/*.js"
     ],
