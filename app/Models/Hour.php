@@ -53,15 +53,14 @@ class Hour extends Model
     public function scopeFilter($query, array $filters): void
     {
         if ($filters['month'] ?? false) {
-            $period = CarbonPeriod::create(Carbon::parse(request('month'))->firstOfMonth(), Carbon::parse(request('month'))->lastOfMonth());
-            $query->whereBetween('date', [$period->first(), $period->last()]);
+            $query->whereBetween('date', [Carbon::parse(request('month'))->firstOfMonth(), Carbon::parse(request('month'))->lastOfMonth()]);
         }
         if ($filters['user'] ?? false) {
             $query->where('user_id', request('user'));
         }
     }
 
-    public function order_hour(): OrderHour
+    public function order_hour(): OrderHour|null
     {
         return OrderHour::where('hour_id', $this->id)->first();
     }

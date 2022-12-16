@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreHourRequest;
+use App\Http\Requests\UpdateHourRequest;
 use App\Models\Customer;
 use App\Models\Hour;
 use App\Models\HourType;
@@ -18,12 +19,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class HourController extends Controller
+class OldHourController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,18 +32,33 @@ class HourController extends Controller
      */
     public function index(): Response
     {
-        $data = Hour::with('type')->filter(request(['month', 'user']))->get();
-        $user = User::find(request('user',auth()->id()));
-
-        $technical_report_hours = TechnicalReportHour::with(['technical_report','technical_report.customer','hour'])->whereIn('hour_id',$data->where('hour_type_id',2)->map(function ($item){ return $item->id; }))->get();
-        $order_hours = OrderHour::with(['order','order.customer','hour'])->whereIn('hour_id',$data->where('hour_type_id',1)->map(function ($item){ return $item->id; }))->get();
-
         return response()->view('hours.index', [
-            'user' => $user,
-            'technical_report_hours' => $technical_report_hours->groupBy('technical_report_id'),
-            'order_hours' => $order_hours->groupBy('order_id'),
-            'other_hours' => $data->whereNotIn('hour_type_id',[1,2])->groupBy('hour_type_id'),
+            'data' => Hour::with('type')->filter(request(['month', 'user']))->get()->groupBy(
+                [
+                    static function ($item) {
+                        return $item->type->description;
+                    },
+                    static function ($item) {
+                        if ($item->type->description === 'Commessa') {
+                            return $item->order_hour()->order->innerCode;
+                        }
+                        if ($item->type->description === 'Foglio intervento') {
+                            return $item->technical_report_hour()->technical_report->number;
+                        }
+
+                        return false;
+                    }, static function ($item) {
+                        if ($item->type->description === 'Commessa') {
+                            return $item->order_hour()->job_type->title;
+                        }
+
+                        return false;
+                    },
+                ]),
             'period' => CarbonPeriod::create(Carbon::parse(request('month'))->firstOfMonth(), Carbon::parse(request('month'))->lastOfMonth()),
+            'hour_types' => HourType::all(),
+            'job_types' => JobType::all(),
+            'users' => User::all(),
         ]);
     }
 
@@ -66,38 +81,31 @@ class HourController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreHourRequest $request
+     * @param  StoreHourRequest  $request
+     * @return Response|RedirectResponse|JsonResponse
      *
-     * @return Hour|Model
+     * @throws ValidationException
      */
-    public function store(StoreHourRequest $request)
+    public function store(StoreHourRequest $request): Response|RedirectResponse|JsonResponse
     {
         $validated = $request->validated();
-        if ($validated['user_id'] ?? true){
-            $validated['user_id'] = auth()->id();
+        if (! isset($validated['date'])) {
+            $this->multipleStore($request);
+        } else {
+            $validated['user_id'] = $request->get('user_id', auth()->id());
+            $hour = Hour::create($validated);
+            if ($hour->type->id === 1) {
+                $this->storeOrderHour($hour, $request);
+            } elseif ($request->get('hour_type_id') === '2') {
+                $this->storeTechnicalReportHour($hour, $request);
+            }
         }
-        return Hour::create($validated);
+        if ($request->ajax()) {
+            return response('Ora Inserita Correttamente');
+        }
+
+        return redirect()->action([__CLASS__, 'index'], ['month' => Carbon::now()->format('Y-m')])->with('message', 'Ora Inserita Correttamente');
     }
-//    public function store(StoreHourRequest $request): Response|RedirectResponse|JsonResponse
-//    {
-//        $validated = $request->validated();
-//        if (! isset($validated['date'])) {
-//            $this->multipleStore($request);
-//        } else {
-//            $validated['user_id'] = $request->get('user_id', auth()->id());
-//            $hour = Hour::create($validated);
-//            if ($hour->type->id === 1) {
-//                $this->storeOrderHour($hour, $request);
-//            } elseif ($request->get('hour_type_id') === '2') {
-//                $this->storeTechnicalReportHour($hour, $request);
-//            }
-//        }
-//        if ($request->ajax()) {
-//            return response('Ora Inserita Correttamente');
-//        }
-//
-//        return redirect()->action([__CLASS__, 'index'], ['month' => Carbon::now()->format('Y-m')])->with('message', 'Ora Inserita Correttamente');
-//    }
 
     /**
      * Display the specified resource.
@@ -121,40 +129,40 @@ class HourController extends Controller
         //
     }
 
-//    /**
-//     * Update the specified resource in storage.
-//     *
-//     * @param  UpdateHourRequest  $request
-//     * @param  Hour  $hour
-//     * @return Response|RedirectResponse
-//     *
-//     * @throws ValidationException
-//     */
-//    public function update(UpdateHourRequest $request, Hour $hour): Response|RedirectResponse
-//    {
-//        $validated = $request->validated();
-//        $validated['user_id'] = $request->get('user_id', auth()->id());
-//        $hour->update($validated);
-//        if ($hour->type->id === 1) {
-//            $details = Validator::make($request->only(['extra', 'job', 'signed']), [
-//                'extra' => 'required',
-//                'job' => 'required',
-//                'signed' => 'nullable',
-//            ]);
-//            $hour->order_hour()->update($details->validated());
-//        } elseif ($request->get('hour_type_id') === '2') {
-//            $details = Validator::make($request->only(['extra', 'night']), [
-//                'extra' => 'required',
-//                'night' => 'required',
-//            ]);
-//            $hour->technical_report_hour()->update($details->validated());
-//        }
-//        if ($request->ajax()) {
-//            return response('Ora Modificata Correttamente');
-//        }
-//
-//        return redirect()->route('hours.index')->with('message', 'Ora Modificata Correttamente');
-//    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  UpdateHourRequest  $request
+     * @param  Hour  $hour
+     * @return Response|RedirectResponse
+     *
+     * @throws ValidationException
+     */
+    public function update(UpdateHourRequest $request, Hour $hour): Response|RedirectResponse
+    {
+        $validated = $request->validated();
+        $validated['user_id'] = $request->get('user_id', auth()->id());
+        $hour->update($validated);
+        if ($hour->type->id === 1) {
+            $details = Validator::make($request->only(['extra', 'job', 'signed']), [
+                'extra' => 'required',
+                'job' => 'required',
+                'signed' => 'nullable',
+            ]);
+            $hour->order_hour()->update($details->validated());
+        } elseif ($request->get('hour_type_id') === '2') {
+            $details = Validator::make($request->only(['extra', 'night']), [
+                'extra' => 'required',
+                'night' => 'required',
+            ]);
+            $hour->technical_report_hour()->update($details->validated());
+        }
+        if ($request->ajax()) {
+            return response('Ora Modificata Correttamente');
+        }
+
+        return redirect()->route('hours.index')->with('message', 'Ora Modificata Correttamente');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -164,8 +172,7 @@ class HourController extends Controller
      */
     public function destroy(Hour $hour): RedirectResponse
     {
-        if ($hour->order_hour()) $hour->order_hour()->delete();
-        if ($hour->technical_report_hour()) $hour->technical_report_hour()->delete();
+        OrderHour::where('hour_id', $hour->id)->delete();
         $hour->delete();
 
         return back()->with('message', 'Ora eliminata con successo');
@@ -261,7 +268,7 @@ class HourController extends Controller
         }
     }
 
-    public function print(): Response
+    public function print()
     {
         $data = Hour::with('type')->filter(request(['month', 'user']))->get();
         $user = User::find(request('user',auth()->id()));
@@ -275,16 +282,6 @@ class HourController extends Controller
             'order_hours' => $order_hours->groupBy('order_id'),
             'other_hours' => $data->whereNotIn('hour_type_id',[1,2])->groupBy('hour_type_id'),
             'period' => CarbonPeriod::create(Carbon::parse(request('month'))->firstOfMonth(), Carbon::parse(request('month'))->lastOfMonth()),
-        ]);
-    }
-
-    public function update(Request $request, Hour $hour)
-    {
-        $request->validate([
-            'count' => ['required','numeric']
-        ]);
-        $hour->update([
-            'count' => $request->get('count')
         ]);
     }
 }

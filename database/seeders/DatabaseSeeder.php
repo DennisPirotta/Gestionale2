@@ -27,14 +27,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'dennispirotta@gmail.com',
             'password' => Hash::make('pellio2014'),
             'company_id' => 1,
-        ]);                          // Dennis Account
+        ]);                                                       // Dennis Account
+        User::factory(3)->create();                   // Test User
         Customer::factory(5)->create();               // Test Customers
         Order::factory(30)->create();                 // Test Orders
-        TechnicalReport::factory(10)->create();            // Test Technical Reports
-        TechnicalReportHour::factory(5)->create();
-        OrderHour::factory(5)->create();
-//        Hour::factory(30)->create();
-//        OrderHour::factory(10)->create();             // Test Orders hours
-//        TechnicalReportHour::factory(10)->create();        // Test Technical Report hours
+        TechnicalReport::factory(10)->create();       // Test Technical Reports
     }
 }

@@ -5,7 +5,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HourController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderHourController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TechnicalReportHourController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('/orders', OrderController::class);
     Route::resource('/hours', HourController::class);
     Route::resource('/locations', LocationController::class);
+    Route::resource('/technical-report-hours', TechnicalReportHourController::class);
+    Route::resource('/order-hours', OrderHourController::class);
 });
+
+Route::get('/print',[HourController::class,'print'])->name('hour.print');
 
 require __DIR__.'/auth.php';
