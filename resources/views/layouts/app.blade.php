@@ -11,14 +11,16 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Scripts -->
-    @vite(['resources/js/app.js','resources/sass/app.scss','resources/js/fullcalendar.js','resources/js/flowbite.js','resources/js/apexcharts.js'])
+    @vite(['resources/js/app.js','resources/sass/app.scss','resources/js/fullcalendar.js','resources/js/flowbite.js','resources/js/apexcharts.js','resources/css/app.css'])
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    @livewireStyles
 </head>
 <body class="font-sans antialiased">
 <script>if (localStorage.theme === undefined) localStorage.theme = 'light'</script>
-<div  class="min-h-screen bg-gray-100 dark:bg-gray-900">
+<div  class="min-h-screen bg-gray-100 dark:bg-gray-900" id="app">
     @include('layouts.navigation')
 
     <!-- Page Heading -->
@@ -44,5 +46,6 @@
         }
     })
 </script>
+@livewireScripts
 </body>
 </html>

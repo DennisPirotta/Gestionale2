@@ -7,11 +7,16 @@
         <th scope="row" class="border-r dark:border-gray-700 p-1.5"></th>
         @foreach($period as $day)
             <td class="border-r dark:border-gray-700">
-            @foreach($other_hour as $record)
-                @if($record->date == $day->format('Y-m-d'))
-                    {{ $record->count }}
-                @endif
-            @endforeach
+                <div    contenteditable="true"
+                        data-date="{{ $day->format('Y-m-d') }}"
+                        data-hour-type="{{ $type }}"
+                >
+                @foreach($other_hour as $record)
+                    @if($record->date == $day->format('Y-m-d'))
+                        {{ $record->count }}
+                    @endif
+                @endforeach
+                </div>
             </td>
         @endforeach
     </tr>

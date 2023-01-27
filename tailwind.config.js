@@ -1,7 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-const colors = require('tailwindcss/colors');
-
-
+const defaultTheme = require('tailwindcss/defaultTheme')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: 'class',
@@ -9,15 +6,16 @@ module.exports = {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.css",
-        "./resources/**/*.vue",
         "./node_modules/flowbite/**/*.js"
+    ],
+    safelist: [
+        {
+            pattern: /(bg|text)-(red|green|blue|yellow|indigo|orange|pink)-(100|300|400|800|900)/,
+        }
     ],
 
     theme: {
         extend: {
-            colors: {
-                indigo: colors.indigo
-            },
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },

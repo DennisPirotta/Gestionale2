@@ -22,11 +22,11 @@
                                     <data class="hidden">{{ $record->hour->id }}</data>
                                 @if($record->nightEU)
                                 </div>
-                                <div data-popover-target="night-{{ $record->id }}" data-popover-trigger="click" class="cursor-pointer mx-1 bg-blue-100 text-blue-800 text-sm font-medium px-1 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                                <div data-popover-target="night-{{ $record->id }}" data-popover-trigger="click" class="cursor-pointer mx-1 bg-blue-200 text-blue-800 text-sm font-medium px-1 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
                                     EU
                                 @elseif($record->nightXEU)
                                 </div>
-                                <div data-popover-target="night-{{ $record->id }}" data-popover-trigger="click" class="cursor-pointer mx-1 bg-green-100 text-green-800 text-sm font-medium px-1 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                                <div data-popover-target="night-{{ $record->id }}" data-popover-trigger="click" class="cursor-pointer mx-1 bg-green-300 text-green-800 text-sm font-medium px-1 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
                                     XEU
                                 @else
                                 </div>
@@ -44,13 +44,13 @@
                                                 <input type="hidden" name="technical_report_hour_id" value="{{ $record->id }}">
                                                 <input type="hidden" id="night_eu_{{$record->id}}" name="night_eu">
                                                 <input type="hidden" id="night_xeu_{{$record->id}}" name="night_xeu">
-                                                <button type="submit" onclick="$('#night_eu_{{$record->id}}').val(1);$('#night_xeu_{{$record->id}}').val(0);" class="cursor-pointer mx-2 text-sm font-medium px-2.5 py-0.5 rounded bg-indigo-200 text-indigo-800">
+                                                <button type="submit" onclick="$('#night_eu_{{$record->id}}').val(1);$('#night_xeu_{{$record->id}}').val(0);" class="cursor-pointer mx-2 text-sm font-medium px-2.5 py-0.5 rounded bg-blue-200 text-blue-800 dark:bg-blue-200 dark:text-blue-800">
                                                     EU
                                                 </button>
-                                                <button type="submit" onclick="$('#night_eu_{{$record->id}}').val(0);$('#night_xeu_{{$record->id}}').val(1);" class="cursor-pointer mx-2 text-sm font-medium px-2.5 py-0.5 rounded bg-green-200 text-green-900">
+                                                <button type="submit" onclick="$('#night_eu_{{$record->id}}').val(0);$('#night_xeu_{{$record->id}}').val(1);" class="cursor-pointer mx-2 text-sm font-medium px-2.5 py-0.5 rounded bg-green-300 text-green-800 dark:bg-green-200 dark:text-green-900">
                                                     XEU
                                                 </button>
-                                                <button type="submit" onclick="$('#night_eu_{{$record->id}}').val(0);$('#night_xeu_{{$record->id}}').val(0);" class="cursor-pointer mx-2 text-sm font-medium px-2.5 py-0.5 rounded bg-yellow-200 text-yellow-900">
+                                                <button type="submit" onclick="$('#night_eu_{{$record->id}}').val(0);$('#night_xeu_{{$record->id}}').val(0);" class="cursor-pointer mx-2 text-sm font-medium px-2.5 py-0.5 rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-200 dark:text-yellow-900">
                                                     NO
                                                 </button>
                                             </form>
@@ -64,7 +64,4 @@
             @endforeach
         </tr>
     @endforeach
-    <script>
-
-    </script>
 @endif

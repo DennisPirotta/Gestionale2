@@ -41,4 +41,5 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/print',[HourController::class,'print'])->name('hour.print');
 
+
 require __DIR__.'/auth.php';
