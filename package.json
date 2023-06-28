@@ -24,7 +24,7 @@
     "@fullcalendar/interaction": "^6.0.0",
     "@fullcalendar/list": "^6.0.0",
     "@fullcalendar/timegrid": "^6.0.0",
-    "apexcharts": "^3.36.3",
+    "apexcharts": "^3.41.0",
     "flowbite": "^1.5.5",
     "flowbite-datepicker": "^1.2.2",
     "material-colors": "^1.2.6",
