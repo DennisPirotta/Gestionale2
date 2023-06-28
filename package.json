@@ -31,6 +31,6 @@
     "postcss-calc": "^8.2.4",
     "postcss-custom-properties": "^13.0.0",
     "sass": "^1.57.0",
-    "sweetalert2": "^11.7.0"
+    "sweetalert2": "^11.7.11"
   }
 }
